@@ -1,0 +1,34 @@
+// CBho.idl : IDL source for CBho
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CBho.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(0B9CA036-554B-474E-B920-74035F37B369),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IPageCapture : IDispatch{
+};
+[
+	uuid(89711670-D382-4BFF-9BF6-F84407E8541A),
+	version(1.0),
+]
+library CBhoLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(7EEF1B3C-280A-4C17-A1F0-45AD0CFDAECE)		
+	]
+	coclass PageCapture
+	{
+		[default] interface IPageCapture;
+	};
+};
+
