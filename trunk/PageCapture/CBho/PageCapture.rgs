@@ -1,0 +1,68 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {7EEF1B3C-280A-4C17-A1F0-45AD0CFDAECE} = s 'PageCapture Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{89711670-D382-4BFF-9BF6-F84407E8541A}'
+			Version = s '1.0'
+		}
+	}
+}
+
+HKLM
+{
+	NoRemove SOFTWARE
+	{
+		NoRemove Microsoft
+		{
+			NoRemove Windows
+			{
+				NoRemove CurrentVersion
+				{
+					NoRemove Explorer
+					{
+						NoRemove 'Browser Helper Objects'
+						{
+						 	ForceRemove {7EEF1B3C-280A-4C17-A1F0-45AD0CFDAECE} = s 'PageCapture Class'
+                            { 
+                                val NoExplorer = d '1'
+                           	}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+HKLM
+{
+    NoRemove Software
+    {
+        NoRemove Microsoft
+        {
+            NoRemove 'Internet Explorer'
+            {
+                NoRemove Extensions
+                {
+                    ForceRemove '{D5501ECB-50A0-4029-848C-0DA04DEFDD26}'
+                    {
+                        val ButtonText = s 'НиЭМ'
+                        val Icon = s '%MODULE%,201'
+                        val HotIcon = s '%MODULE%,202'
+                        val CLSID = s '{1FBA04EE-3024-11d2-8F1F-0000F87ABD16}'
+                        val ClsidExtension = s '{7EEF1B3C-280A-4C17-A1F0-45AD0CFDAECE}'
+                        val 'Default Visible' = s 'yes'
+                    }
+                }
+            }
+        }
+    }
+}
