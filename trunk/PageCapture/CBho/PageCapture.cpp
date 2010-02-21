@@ -1,7 +1,7 @@
 ﻿// PageCapture.cpp : Implementation of CPageCapture
-
 #include "stdafx.h"
 #include "PageCapture.h"
+#include "math.h"
 
 // CPageCapture
 STDMETHODIMP CPageCapture::SetSite(IUnknown *pUnkSite)
@@ -46,11 +46,10 @@ STDMETHODIMP CPageCapture::SetSite(IUnknown *pUnkSite)
 	//调用基类实现。   
 	return IObjectWithSiteImpl<CPageCapture>::SetSite(pUnkSite);   
 }  
-void STDMETHODCALLTYPE CPageCapture::OnDownLoadComplete()
-{
-	if(this->m_CaptueOption)
-		this->Capture();
-}
+
+//void STDMETHODCALLTYPE CPageCapture::OnDownLoadComplete()
+//{
+//}
 
 void STDMETHODCALLTYPE CPageCapture::OnDocumentComplete(IDispatch* pDisp, VARIANT* URL)
 {
@@ -66,20 +65,18 @@ STDMETHODIMP CPageCapture::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, O
 	return S_OK;   
 }
 // 执行脚本
-void CPageCapture::ExecScript(BSTR code)
+void CPageCapture::ExecScript(CComPtr<IHTMLDocument2> m_spHtmlDoc,BSTR code)
 {
 	IHTMLWindow2* pWindow;   
-	this->m_spHtmlDoc->get_parentWindow(&pWindow);
+	m_spHtmlDoc->get_parentWindow(&pWindow);
 	VARIANT ret;   
 	ret.vt = VT_EMPTY;   
 	pWindow->execScript(code,CComBSTR(L"javascript"),&ret);
 }
 
-void CPageCapture::Refresh(void)
+void CPageCapture::Refresh(CComPtr<IHTMLDocument2> m_spHtmlDoc)
 {
-	if(this->m_NoRefresh) return;
-
-	ExecScript(CComBSTR(L"location.reload();"));
+	ExecScript(m_spHtmlDoc,CComBSTR(L"location.reload();"));
 }
 
 //卷动页面
@@ -91,13 +88,12 @@ void CPageCapture::ScrollPage(IHTMLElement * page,BSTR direction,int value)
 	page->setAttribute(direction,CComVariant(value));
 }
 
-void CPageCapture::Capture(void)
+void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch> pDocDispatch,CString filename)
 {
-	//MessageBox(NULL,this->m_CaptureFileName,L"截图吧",0);
-
 	HRESULT hr;
 	CComPtr<IHTMLDocument3> pDoc3 ;
-	hr = this->m_spHtmlDoc->QueryInterface(IID_IHTMLDocument3,(void**)&pDoc3) ; 
+
+	hr = m_spHtmlDoc->QueryInterface(IID_IHTMLDocument3,(void**)&pDoc3) ; 
 	
 	if(FAILED(hr) || pDoc3 == NULL) return;
 
@@ -118,6 +114,7 @@ void CPageCapture::Capture(void)
 			{
 				HWND hwnd = FindWindowEx(hwndBrowser, NULL, L"Shell DocObject View", NULL);
 				hwnd = FindWindowEx(hwnd, NULL, L"Internet Explorer_Server", NULL);
+
 				if(hwnd!=NULL)
 				{	
 					//MessageBox(NULL,L"句柄有了",L"截图",0);
@@ -132,7 +129,7 @@ void CPageCapture::Capture(void)
 
 					///获取Body
 					IHTMLElement *spBody;
-					hr = this->m_spHtmlDoc->get_body(&spBody);
+					hr = m_spHtmlDoc->get_body(&spBody);
 					if(FAILED(hr) || spBody == NULL) return;
 
 					spBody->getAttribute(CComBSTR(L"clientHeight"),0,&bodyIeHeight);
@@ -169,50 +166,30 @@ void CPageCapture::Capture(void)
 					imgsize.cx = pageWidth.intVal;
 					imgsize.cy = pageHeight.intVal;
 					
-					CString tmp;
-					tmp.Format(L"ieHeight:%d",ieHeight.intVal);
-					MessageBox(NULL,tmp,L"截图",0);
-					tmp.Format(L"ieWidth:%d",ieWidth.intVal);
-					MessageBox(NULL,tmp,L"截图",0);
-
-					int vpages = int((double)imgsize.cy/(double)clientsize.cy+0.5); 
-					int hpages = int((double)imgsize.cx/(double)imgsize.cx+0.5); 
+					int vpages = int(ceil((double)imgsize.cy/(double)clientsize.cy)); 
+					int hpages = int(ceil((double)imgsize.cx/(double)clientsize.cx)); 
 
 					CImage img,imgtmp;
 					img.CreateEx(imgsize.cx,imgsize.cy,32,BI_RGB);
-					
 
-					for(int i=0;i<vpages;i++)
+					for(int y=0;y<vpages;y++)
 					{
-						this->ScrollPage(spPage,CComBSTR(L"scrollTop"),i*clientsize.cy);
+						this->ScrollPage(spPage,CComBSTR(L"scrollTop"),y*clientsize.cy);
 						for(int x=0;x<hpages;x++)
 						{
-							this->ScrollPage(spPage,CComBSTR(L"scrollLeft"),i*clientsize.cx);
-
-							HDC hdcPage = GetDC(NULL);
-							HDC hdc = CreateCompatibleDC(hdcPage);
-							HBITMAP hbmp = CreateCompatibleBitmap(hdcPage,clientsize.cx+2,clientsize.cy+2);
-							SelectObject(hdc, hbmp);
-							//截图
-							PrintWindow(hwnd, hdc, PW_CLIENTONLY);
-
-
-							//CImage test;
-							//test.Attach(hbmp);
-							//test.Save(this->m_CaptureFileName);
-							//return;
-
+							this->ScrollPage(spPage,CComBSTR(L"scrollLeft"),x*clientsize.cx);
+							
 							pt.x = x*clientsize.cx;
-							pt.y = i*clientsize.cy;
+							pt.y = y*clientsize.cy;
 							tmpimg.cx = clientsize.cx;
 							tmpimg.cy = clientsize.cy;
 							srcpt.x = 2;
 							srcpt.y = 2;
 							
-							if(i == vpages-1 && i>0)
+							if(y == vpages-1 && y>0)
 							{
 								//pt.y --;
-								tmpimg.cy = imgsize.cy - i*clientsize.cy;
+								tmpimg.cy = imgsize.cy - y*clientsize.cy;
 								srcpt.y = clientsize.cy - tmpimg.cy ;
 							}
 
@@ -223,18 +200,37 @@ void CPageCapture::Capture(void)
 								srcpt.x = clientsize.cx - tmpimg.cx;
 							}
 
-							//拼贴在一起
+							HDC hdcPage = GetDC(NULL);
+							HDC hdc = CreateCompatibleDC(hdcPage);
+							HBITMAP hbmp = CreateCompatibleBitmap(hdcPage,clientsize.cx+2,clientsize.cy+2);
+							SelectObject(hdc, hbmp);
+
+							PrintWindow(hwnd, hdc, PW_CLIENTONLY);
+
+							///拼贴在一起
 							BitBlt(img.GetDC(),pt.x, pt.y,tmpimg.cx,tmpimg.cy,hdc,srcpt.x,srcpt.y,SRCCOPY);
 
+							img.ReleaseDC();
 							DeleteDC(hdc);
 							DeleteObject(hbmp);
 							ReleaseDC(NULL, hdcPage);
 						}
 					}
-					img.Save(this->m_CaptureFileName);
+
 					///恢复位置
 					spPage->setAttribute(CComBSTR(L"scrollTop"),oldscrollTop);
 					spPage->setAttribute(CComBSTR(L"scrollLeft"),oldscrollLeft);
+					
+					if(!img.IsNull())
+					{
+						if(SUCCEEDED(img.Save(filename)))
+						{
+							//打开图片
+							ShellExecute(NULL,L"open",filename,NULL,NULL,SW_SHOWMAXIMIZED); 
+						}
+
+						img.Destroy();
+					}
 				}
 			}
 
@@ -244,71 +240,41 @@ void CPageCapture::Capture(void)
 		pServiceProvider->Release();
 	}
 
-	this->m_CaptueOption = false;
-	this->m_CaptureFileName.Empty();
-
-	if(!this->m_NoRefresh)
-	{
-		/*CComQIPtr<ICustomDoc, &IID_ICustomDoc> spCustomDoc(this->pDocDispatch);
-		if (spCustomDoc)
-			spCustomDoc->SetUIHandler(this);*/
-	}
-	
-	this->pDocDispatch.Release();
-	this->Refresh();
 }
 
 STDMETHODIMP CPageCapture::Exec(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, VARIANTARG*)   
 {   
-
 	if(m_spUnkSite == NULL || m_spWebBrowser == NULL) return S_OK;
 
 	HRESULT hr;
 	BSTR btitle;
 	CString stitle;
+	CComPtr<IHTMLDocument2> m_spHtmlDoc;
+	CComPtr<IDispatch> pDocDispatch;
 
-	hr = this->m_spWebBrowser->get_Document(&this->pDocDispatch);
+	hr = this->m_spWebBrowser->get_Document(&pDocDispatch);
 
-	if(FAILED(hr) || this->pDocDispatch == NULL) return S_OK;
+	if(FAILED(hr) || pDocDispatch == NULL) return S_OK;
 
-	this->m_spHtmlDoc = pDocDispatch;
+	m_spHtmlDoc = pDocDispatch;
 
-	if(this->m_CaptureFileName.IsEmpty())
+	hr = m_spHtmlDoc->get_title(&btitle);
+
+	stitle = OLE2CT(btitle);
+
+	if(stitle.GetLength()<1)
+		stitle = L"pagecapture.jpg";
+	else
+		stitle.Format(L"%s.jpg",stitle.Left(10));
+
+	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY,L"JPG 文件(*.jpg)|*.jpg||");  
+	filedialog.m_ofn.lpstrTitle = L"请输入文件名";
+
+	if(filedialog.DoModal() == IDOK)
 	{
-		hr = this->m_spHtmlDoc->get_title(&btitle);
-
-		stitle = OLE2CT(btitle);
-
-		if(stitle.GetLength()<1)
-			stitle = L"pagecapture.jpg";
-		else
-			stitle.Format(L"%s.jpg",stitle.Left(10));
-
-		CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY,L"JPG 文件(*.jpg)|*.jpg||");  
-		filedialog.m_ofn.lpstrTitle = L"请输入文件名";
-
-		if(filedialog.DoModal() != IDOK)
-		{
-			this->pDocDispatch.Release();
-			return S_OK; 
-		}
-
-		this->m_CaptureFileName =  filedialog.GetPathName();
+		this->Capture(m_spHtmlDoc,pDocDispatch,filedialog.GetPathName());
 	}
-
-	this->m_CaptueOption = true;
-
-	if(this->m_NoRefresh)
-	{
-		this->Capture();
-	}else
-	{
-	/*	CComQIPtr<ICustomDoc, &IID_ICustomDoc> spCustomDoc(pDocDispatch);
-		if (spCustomDoc)
-			spCustomDoc->SetUIHandler(this);*/
-	}
-	
-	this->Refresh();
+	pDocDispatch.Release();
 
 	return S_OK;
 }

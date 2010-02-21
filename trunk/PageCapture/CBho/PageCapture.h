@@ -27,13 +27,10 @@ class ATL_NO_VTABLE CPageCapture :
 	public IDispEventImpl<1, CPageCapture, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
 	//用于工具栏图标
 	public IOleCommandTarget
-	//public IDocHostUIHandler
 {
 public:
 	CPageCapture()
 	{
-		this->m_CaptueOption = false;
-		this->m_NoRefresh = true;
 	}
 
 	DECLARE_REGISTRY_RESOURCEID(IDR_PAGECAPTURE)
@@ -63,128 +60,27 @@ public:
 
 public:
 	void ScrollPage(IHTMLElement * page,BSTR direction,int value);
-	void Refresh(void);
-	void Capture(void);
-	CComPtr<IHTMLDocument2> m_spHtmlDoc;
-	CComPtr<IDispatch> pDocDispatch;
-	void ExecScript(BSTR code);
-	CString m_CaptureFileName;
+	
+	void Refresh(CComPtr<IHTMLDocument2> m_spHtmlDoc);
+	void Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch> pDocDispatch,CString filename);
+	void ExecScript(CComPtr<IHTMLDocument2> m_spHtmlDoc,BSTR code);
+	
 	STDMETHOD(SetSite)(IUnknown * pUnkSite);
 	CComPtr<IWebBrowser2> m_spWebBrowser;
 
 	void STDMETHODCALLTYPE OnDocumentComplete(IDispatch* pDisp, VARIANT* URL); 
-	void STDMETHODCALLTYPE OnDownLoadComplete(); 
+	//void STDMETHODCALLTYPE OnDownLoadComplete(); 
 
 	BOOL m_fAdvised;
 	//用于IE事件
 	BEGIN_SINK_MAP(CPageCapture)
 		SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE , OnDocumentComplete)
-		SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOWNLOADCOMPLETE, OnDownLoadComplete)
+		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOWNLOADCOMPLETE, OnDownLoadComplete)
 	END_SINK_MAP()
 
 	//用于工具栏图标
 	STDMETHOD(Exec)(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, VARIANTARG* pvaOut);   
 	STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
-	
-	bool m_CaptueOption;
-	//
-	// IDocHostUIHandler 用于取消滚条条
-	//
-	STDMETHOD(GetHostInfo)(DOCHOSTUIINFO FAR *pInfo)
-	{
-
-		//if(m_CaptueOption)
-		//{
-		//	pInfo->cbSize = sizeof(DOCHOSTUIINFO);
-		//	pInfo->dwFlags =  DOCHOSTUIFLAG_DIALOG |
-		//		DOCHOSTUIFLAG_THEME  |
-		//		DOCHOSTUIFLAG_NO3DBORDER |
-		//		DOCHOSTUIFLAG_SCROLL_NO;
-		//}
-
-		return S_OK;
-	}
-
-	bool m_NoRefresh;
-	//IDocHostUIHandler 接口其他无用的处理方法
-		STDMETHOD(ShowContextMenu)(DWORD dwID, POINT FAR* ppt, IUnknown FAR* pcmdTarget, IDispatch FAR* pdispReserved)
-	{
-		return S_FALSE;
-	}
-
-	STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject FAR* pActiveObject,
-		IOleCommandTarget FAR* pCommandTarget,
-		IOleInPlaceFrame  FAR* pFrame,
-		IOleInPlaceUIWindow FAR* pDoc)
-	{
-		return S_FALSE;
-	}
-
-	STDMETHOD(HideUI)(void)
-	{
-		return S_OK;
-	}
-
-	STDMETHOD(UpdateUI)(void)
-	{
-
-		return S_OK;
-	}
-
-	STDMETHOD(EnableModeless)(BOOL fEnable)
-	{
-
-		return S_OK;
-	}
-
-	STDMETHOD(OnDocWindowActivate)(BOOL fActivate)
-	{
-
-		return S_OK;
-	}
-
-	STDMETHOD(OnFrameWindowActivate)(BOOL fActivate)
-	{
-
-		return S_OK;
-	}
-
-	STDMETHOD(ResizeBorder)(LPCRECT prcBorder, IOleInPlaceUIWindow FAR* pUIWindow, BOOL fFrameWindow)
-	{
-
-		return S_OK;
-	}
-
-	STDMETHOD(TranslateAccelerator)(LPMSG lpMsg, const GUID FAR* pguidCmdGroup, DWORD nCmdID)
-	{
-
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(GetOptionKeyPath)(LPOLESTR FAR* pchKey, DWORD dw)
-	{
-		return E_FAIL;
-	}
-
-	STDMETHOD(GetDropTarget)(IDropTarget* pDropTarget, IDropTarget** ppDropTarget)
-	{
-		return S_OK;
-	}
-
-	STDMETHOD(GetExternal)(IDispatch** ppDispatch)
-	{
-		return S_FALSE;
-	}
-
-	STDMETHOD(TranslateUrl)(DWORD dwTranslate, OLECHAR* pchURLIn, OLECHAR** ppchURLOut)
-	{
-		return S_FALSE;
-	}
-
-	STDMETHOD(FilterDataObject)(IDataObject* pDO, IDataObject** ppDORet)
-	{
-		return S_FALSE;
-	}
 
 };
 
