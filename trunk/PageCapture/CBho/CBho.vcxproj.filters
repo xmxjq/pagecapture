@@ -71,9 +71,6 @@
     <None Include="PageCapture.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\..\WANG%27S STUDIOS\Logo\Cell2.ico">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="CBho.idl">
