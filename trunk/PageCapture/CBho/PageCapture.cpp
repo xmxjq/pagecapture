@@ -1,4 +1,4 @@
-ï»¿// PageCapture.cpp : Implementation of CPageCapture
+// PageCapture.cpp : Implementation of CPageCapture
 #include "stdafx.h"
 #include "PageCapture.h"
 #include "math.h"
@@ -14,12 +14,12 @@ STDMETHODIMP CPageCapture::SetSite(IUnknown *pUnkSite)
 		hr = pUnkSite->QueryInterface(&sp);   
 		if(SUCCEEDED(hr) && sp)   
 		{   
-			//ç¼“å­˜æŒ‡å‘IWebBrowser2çš„æŒ‡é’ˆ   
+			//»º´æÖ¸ÏòIWebBrowser2µÄÖ¸Õë   
 			hr = sp->QueryService(IID_IWebBrowserApp, IID_IWebBrowser2, (void**)&m_spWebBrowser);   
 
 			if(SUCCEEDED(hr)&&m_spWebBrowser!=0)   
 			{   
-				//æ³¨å†ŒDWebBrowserEvents2äº‹ä»¶ã€‚   
+				//×¢²áDWebBrowserEvents2ÊÂ¼ş¡£   
 				hr=DispEventAdvise(m_spWebBrowser);   
 
 				if(SUCCEEDED(hr))   
@@ -33,17 +33,17 @@ STDMETHODIMP CPageCapture::SetSite(IUnknown *pUnkSite)
 	}   
 	else  
 	{   
-		//å–æ¶ˆæ³¨å†Œäº‹ä»¶ã€‚   
+		//È¡Ïû×¢²áÊÂ¼ş¡£   
 		if(m_fAdvised)   
 		{   
 			DispEventUnadvise(m_spWebBrowser);   
 			m_fAdvised=FALSE;   
 		}   
-		//åœ¨æ­¤é‡Šæ”¾ç¼“å­˜çš„æŒ‡é’ˆå’Œå…¶ä»–èµ„æºã€‚   
+		//ÔÚ´ËÊÍ·Å»º´æµÄÖ¸ÕëºÍÆäËû×ÊÔ´¡£   
 		m_spWebBrowser.Release();   
 		//m_spTarget.Release();   
 	}   
-	//è°ƒç”¨åŸºç±»å®ç°ã€‚   
+	//µ÷ÓÃ»ùÀàÊµÏÖ¡£   
 	return IObjectWithSiteImpl<CPageCapture>::SetSite(pUnkSite);   
 }  
 
@@ -64,7 +64,7 @@ STDMETHODIMP CPageCapture::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, O
 
 	return S_OK;   
 }
-// æ‰§è¡Œè„šæœ¬
+// Ö´ĞĞ½Å±¾
 void CPageCapture::ExecScript(CComPtr<IHTMLDocument2> m_spHtmlDoc,BSTR code)
 {
 	IHTMLWindow2* pWindow;   
@@ -79,7 +79,7 @@ void CPageCapture::Refresh(CComPtr<IHTMLDocument2> m_spHtmlDoc)
 	ExecScript(m_spHtmlDoc,CComBSTR(L"location.reload();"));
 }
 
-//å·åŠ¨é¡µé¢
+//¾í¶¯Ò³Ãæ
 void CPageCapture::ScrollPage(IHTMLElement * page,BSTR direction,int value)
 {
 	if(value<0)
@@ -117,9 +117,9 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 
 				if(hwnd!=NULL)
 				{	
-					//MessageBox(NULL,L"å¥æŸ„æœ‰äº†",L"æˆªå›¾",0);
+					//MessageBox(NULL,L"¾ä±úÓĞÁË",L"½ØÍ¼",0);
 					
-					//è·å–documentElement
+					//»ñÈ¡documentElement
 					IHTMLElement *spDocEle;
 					hr = pDoc3->get_documentElement(&spDocEle);
 					if(FAILED(hr) || spDocEle == NULL) return;
@@ -127,7 +127,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 					CComVariant ieHeight,ieWidth,pageHeight,pageWidth,bodyIeHeight,docIeHeight,oldscrollTop,oldscrollLeft; 
 					spDocEle->getAttribute(CComBSTR(L"clientHeight"),0,&docIeHeight);
 
-					///è·å–Body
+					///»ñÈ¡Body
 					IHTMLElement *spBody;
 					hr = m_spHtmlDoc->get_body(&spBody);
 					if(FAILED(hr) || spBody == NULL) return;
@@ -135,7 +135,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 					spBody->getAttribute(CComBSTR(L"clientHeight"),0,&bodyIeHeight);
 					
 					bool bodyEnable = false;
-					//å®é™…æ“ä½œçš„å¯¹è±¡
+					//Êµ¼Ê²Ù×÷µÄ¶ÔÏó
 					IHTMLElement *spPage;
 
 					if (docIeHeight.intVal == 0 && bodyIeHeight.intVal > 0)
@@ -145,10 +145,10 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 					}else
 						spPage = spDocEle;
 
-					//è·å–IEæ˜¾ç¤ºå°ºå¯¸
+					//»ñÈ¡IEÏÔÊ¾³ß´ç
 					spPage->getAttribute(CComBSTR(L"clientHeight"),0,&ieHeight);
 					spPage->getAttribute(CComBSTR(L"clientWidth"),0,&ieWidth);
-					//è·å–é¡µé¢å°ºå¯¸
+					//»ñÈ¡Ò³Ãæ³ß´ç
 					spPage->getAttribute(CComBSTR(L"scrollHeight"),0,&pageHeight);
 					spPage->getAttribute(CComBSTR(L"scrollWidth"),0,&pageWidth);
 
@@ -160,7 +160,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 
 					POINT pt,srcpt;
 					SIZE tmpimg,clientsize,imgsize; 
-					//å®¢æˆ·åŒºå°ºå¯¸
+					//¿Í»§Çø³ß´ç
 					clientsize.cx = ieWidth.intVal;
 					clientsize.cy = ieHeight.intVal;
 					imgsize.cx = pageWidth.intVal;
@@ -207,7 +207,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 
 							PrintWindow(hwnd, hdc, PW_CLIENTONLY);
 
-							///æ‹¼è´´åœ¨ä¸€èµ·
+							///Æ´ÌùÔÚÒ»Æğ
 							BitBlt(img.GetDC(),pt.x, pt.y,tmpimg.cx,tmpimg.cy,hdc,srcpt.x,srcpt.y,SRCCOPY);
 
 							img.ReleaseDC();
@@ -217,7 +217,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 						}
 					}
 
-					///æ¢å¤ä½ç½®
+					///»Ö¸´Î»ÖÃ
 					spPage->setAttribute(CComBSTR(L"scrollTop"),oldscrollTop);
 					spPage->setAttribute(CComBSTR(L"scrollLeft"),oldscrollLeft);
 					
@@ -225,7 +225,7 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 					{
 						if(SUCCEEDED(img.Save(filename)))
 						{
-							//æ‰“å¼€å›¾ç‰‡
+							//´ò¿ªÍ¼Æ¬
 							ShellExecute(NULL,L"open",filename,NULL,NULL,SW_SHOWMAXIMIZED); 
 						}
 
@@ -267,8 +267,8 @@ STDMETHODIMP CPageCapture::Exec(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, V
 	else
 		stitle.Format(L"%s.jpg",stitle.Left(10));
 
-	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY,L"JPG æ–‡ä»¶(*.jpg)|*.jpg||");  
-	filedialog.m_ofn.lpstrTitle = L"è¯·è¾“å…¥æ–‡ä»¶å";
+	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY,L"JPG ÎÄ¼ş(*.jpg)|*.jpg||");  
+	filedialog.m_ofn.lpstrTitle = L"ÇëÊäÈëÎÄ¼şÃû";
 
 	if(filedialog.DoModal() == IDOK)
 	{

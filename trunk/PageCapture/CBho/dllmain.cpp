@@ -25,21 +25,21 @@ CCBhoApp theApp;
 
 BOOL CCBhoApp::InitInstance()
 {
-	CString Loader;
-	int i1,i2;
-	TCHAR loader[MAX_PATH]; 
+	//CString Loader;
+	//int i1,i2;
+	//TCHAR loader[MAX_PATH]; 
 
-	GetModuleFileName(NULL,loader, MAX_PATH); 
-	Loader = loader;
+	//GetModuleFileName(NULL,loader, MAX_PATH); 
+	//Loader = loader;
 
-	Loader = Loader.Mid(Loader.ReverseFind(_T('\\'))+1);
-	i1 = Loader.Compare(_T("regsvr32.exe")) ;
-	i2 = Loader.Compare(_T("iexplore.exe"));
+	//Loader = Loader.Mid(Loader.ReverseFind(_T('\\'))+1);
+	//i1 = Loader.Compare(_T("regsvr32.exe")) ;
+	//i2 = Loader.Compare(_T("iexplore.exe"));
 
-	Loader.Empty();
+	//Loader.Empty();
 
-	if (i1!=0 && i2!=0) 
-		return FALSE; 
+	//if (i1!=0 && i2!=0) 
+	//	return FALSE; 
 
 	return CWinApp::InitInstance();
 }

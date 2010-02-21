@@ -1,9 +1,8 @@
-ï»¿// PageCapture.h : Declaration of the CPageCapture
+// PageCapture.h : Declaration of the CPageCapture
 
 #pragma once
 #include "resource.h"       // main symbols
 #include "exdispid.h"
-#include "shlguid.h"
 
 
 #include "CBho_i.h"
@@ -23,9 +22,9 @@ class ATL_NO_VTABLE CPageCapture :
 	public CComCoClass<CPageCapture, &CLSID_PageCapture>,
 	public IObjectWithSiteImpl<CPageCapture>,
 	public IDispatchImpl<IPageCapture, &IID_IPageCapture, &LIBID_CBhoLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
-	//ç”¨äºIEäº‹ä»¶
+	//ÓÃÓÚIEÊÂ¼ş
 	public IDispEventImpl<1, CPageCapture, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
-	//ç”¨äºå·¥å…·æ å›¾æ ‡
+	//ÓÃÓÚ¹¤¾ßÀ¸Í¼±ê
 	public IOleCommandTarget
 {
 public:
@@ -41,7 +40,7 @@ public:
 		COM_INTERFACE_ENTRY(IPageCapture)
 		COM_INTERFACE_ENTRY(IDispatch)
 		COM_INTERFACE_ENTRY(IObjectWithSite)
-		//ç”¨äºå·¥å…·æ å›¾æ ‡
+		//ÓÃÓÚ¹¤¾ßÀ¸Í¼±ê
 		COM_INTERFACE_ENTRY(IOleCommandTarget)
 	END_COM_MAP()
 
@@ -72,13 +71,13 @@ public:
 	//void STDMETHODCALLTYPE OnDownLoadComplete(); 
 
 	BOOL m_fAdvised;
-	//ç”¨äºIEäº‹ä»¶
+	//ÓÃÓÚIEÊÂ¼ş
 	BEGIN_SINK_MAP(CPageCapture)
 		SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE , OnDocumentComplete)
 		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOWNLOADCOMPLETE, OnDownLoadComplete)
 	END_SINK_MAP()
 
-	//ç”¨äºå·¥å…·æ å›¾æ ‡
+	//ÓÃÓÚ¹¤¾ßÀ¸Í¼±ê
 	STDMETHOD(Exec)(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, VARIANTARG* pvaOut);   
 	STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
 
