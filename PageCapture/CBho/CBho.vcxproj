@@ -149,7 +149,6 @@
     <ResourceCompile Include="CBho.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\WANG%27S STUDIOS\Logo\Cell2.ico" />
     <None Include="CBho.def" />
     <None Include="CBho.rgs" />
     <None Include="PageCapture.rgs" />

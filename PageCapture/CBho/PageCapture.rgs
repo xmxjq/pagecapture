@@ -1,4 +1,4 @@
-HKCR
+﻿HKCR
 {
 	NoRemove CLSID
 	{
@@ -54,7 +54,7 @@ HKLM
                 {
                     ForceRemove '{D5501ECB-50A0-4029-848C-0DA04DEFDD26}'
                     {
-                        val ButtonText = s '��ͼ'
+                        val ButtonText = s '截图'
                         val Icon = s '%MODULE%,201'
                         val HotIcon = s '%MODULE%,202'
                         val CLSID = s '{1FBA04EE-3024-11d2-8F1F-0000F87ABD16}'
