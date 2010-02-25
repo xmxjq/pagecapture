@@ -55,6 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -137,6 +138,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PageCapture.cpp" />
+    <ClCompile Include="ProxySwitch.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -146,6 +148,7 @@
     <ClInclude Include="CBho_i.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="PageCapture.h" />
+    <ClInclude Include="ProxySwitch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -156,7 +159,10 @@
   <ItemGroup>
     <None Include="CBho.def" />
     <None Include="CBho.rgs" />
+    <None Include="Cell2.ico" />
+    <None Include="Cell3.ico" />
     <None Include="PageCapture.rgs" />
+    <None Include="ProxySwitch.rgs" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

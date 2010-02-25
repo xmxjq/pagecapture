@@ -17,6 +17,15 @@ import "ocidl.idl";
 interface IPageCapture : IDispatch{
 };
 [
+	object,
+	uuid(B051BE98-C45B-46AB-8A2A-CFFD939CDA74),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IProxySwitch : IDispatch{
+};
+[
 	uuid(89711670-D382-4BFF-9BF6-F84407E8541A),
 	version(1.0),
 ]
@@ -29,6 +38,13 @@ library CBhoLib
 	coclass PageCapture
 	{
 		[default] interface IPageCapture;
+	};
+	[
+		uuid(B2611A8C-379A-4AC6-8412-B8CAF5C42ED0)		
+	]
+	coclass ProxySwitch
+	{
+		[default] interface IProxySwitch;
 	};
 };
 
