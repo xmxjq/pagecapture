@@ -1,0 +1,65 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {B2611A8C-379A-4AC6-8412-B8CAF5C42ED0} = s 'ProxySwitch Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{89711670-D382-4BFF-9BF6-F84407E8541A}'
+			Version = s '1.0'
+		}
+	}
+}
+HKLM
+{
+	NoRemove SOFTWARE
+	{
+		NoRemove Microsoft
+		{
+			NoRemove Windows
+			{
+				NoRemove CurrentVersion
+				{
+					NoRemove Explorer
+					{
+						NoRemove 'Browser Helper Objects'
+						{
+						 	ForceRemove {B2611A8C-379A-4AC6-8412-B8CAF5C42ED0} = s 'ProxySwitch Class'
+                            { 
+                                val NoExplorer = d '1'
+                           	}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+HKLM
+{
+    NoRemove Software
+    {
+        NoRemove Microsoft
+        {
+            NoRemove 'Internet Explorer'
+            {
+                NoRemove Extensions
+                {
+                    ForceRemove '{FC433F41-6183-4C53-9B4B-07DC9E596107}'
+                    {
+                        val ButtonText = s '´úÀí'
+                        val Icon = s '%MODULE%,202'
+                        val HotIcon = s '%MODULE%,201'
+                        val CLSID = s '{1FBA04EE-3024-11d2-8F1F-0000F87ABD16}'
+                        val ClsidExtension = s '{B2611A8C-379A-4AC6-8412-B8CAF5C42ED0}'
+                        val 'Default Visible' = s 'yes'
+                    }
+                }
+            }
+        }
+    }
+}

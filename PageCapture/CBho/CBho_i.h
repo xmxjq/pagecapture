@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Feb 21 21:06:59 2010
+/* at Thu Feb 25 22:17:26 2010
  */
 /* Compiler settings for CBho.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -51,6 +51,12 @@ typedef interface IPageCapture IPageCapture;
 #endif 	/* __IPageCapture_FWD_DEFINED__ */
 
 
+#ifndef __IProxySwitch_FWD_DEFINED__
+#define __IProxySwitch_FWD_DEFINED__
+typedef interface IProxySwitch IProxySwitch;
+#endif 	/* __IProxySwitch_FWD_DEFINED__ */
+
+
 #ifndef __PageCapture_FWD_DEFINED__
 #define __PageCapture_FWD_DEFINED__
 
@@ -61,6 +67,18 @@ typedef struct PageCapture PageCapture;
 #endif /* __cplusplus */
 
 #endif 	/* __PageCapture_FWD_DEFINED__ */
+
+
+#ifndef __ProxySwitch_FWD_DEFINED__
+#define __ProxySwitch_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ProxySwitch ProxySwitch;
+#else
+typedef struct ProxySwitch ProxySwitch;
+#endif /* __cplusplus */
+
+#endif 	/* __ProxySwitch_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -183,6 +201,117 @@ EXTERN_C const IID IID_IPageCapture;
 #endif 	/* __IPageCapture_INTERFACE_DEFINED__ */
 
 
+#ifndef __IProxySwitch_INTERFACE_DEFINED__
+#define __IProxySwitch_INTERFACE_DEFINED__
+
+/* interface IProxySwitch */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IProxySwitch;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("B051BE98-C45B-46AB-8A2A-CFFD939CDA74")
+    IProxySwitch : public IDispatch
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IProxySwitchVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IProxySwitch * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IProxySwitch * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IProxySwitch * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IProxySwitch * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IProxySwitch * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IProxySwitch * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IProxySwitch * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        END_INTERFACE
+    } IProxySwitchVtbl;
+
+    interface IProxySwitch
+    {
+        CONST_VTBL struct IProxySwitchVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IProxySwitch_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IProxySwitch_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IProxySwitch_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IProxySwitch_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IProxySwitch_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IProxySwitch_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IProxySwitch_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IProxySwitch_INTERFACE_DEFINED__ */
+
+
 
 #ifndef __CBhoLib_LIBRARY_DEFINED__
 #define __CBhoLib_LIBRARY_DEFINED__
@@ -199,6 +328,14 @@ EXTERN_C const CLSID CLSID_PageCapture;
 
 class DECLSPEC_UUID("7EEF1B3C-280A-4C17-A1F0-45AD0CFDAECE")
 PageCapture;
+#endif
+
+EXTERN_C const CLSID CLSID_ProxySwitch;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("B2611A8C-379A-4AC6-8412-B8CAF5C42ED0")
+ProxySwitch;
 #endif
 #endif /* __CBhoLib_LIBRARY_DEFINED__ */
 

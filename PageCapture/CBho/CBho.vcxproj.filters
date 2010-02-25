@@ -34,6 +34,9 @@
     <ClCompile Include="PageCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProxySwitch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -54,6 +57,9 @@
     <ClInclude Include="PageCapture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ProxySwitch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CBho.rc">
@@ -69,6 +75,15 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="PageCapture.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cell2.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cell3.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ProxySwitch.rgs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

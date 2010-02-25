@@ -265,14 +265,26 @@ STDMETHODIMP CPageCapture::Exec(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, V
 	if(stitle.GetLength()<1)
 		stitle = L"pagecapture.jpg";
 	else
-		stitle.Format(L"%s.jpg",stitle.Left(10));
+	{
+		if(stitle.GetLength() > 10)
+		{
+			if(stitle.GetAt(9)>128)
+				stitle.Format(L"%s.jpg",stitle.Left(9));
+			else
+			  stitle.Format(L"%s.jpg",stitle.Left(10));
+		}
+		
+	}
 
-	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY,L"JPG 文件(*.jpg)|*.jpg||");  
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());   
+
+	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,L"JPG 文件(*.jpg)|*.jpg||");  
+	
 	filedialog.m_ofn.lpstrTitle = L"请输入文件名";
 
 	if(filedialog.DoModal() == IDOK)
 	{
-		this->Capture(m_spHtmlDoc,pDocDispatch,filedialog.GetPathName());
+		this->Capture(m_spHtmlDoc,pDocDispatch,L"c:\\test.jpg");
 	}
 	pDocDispatch.Release();
 

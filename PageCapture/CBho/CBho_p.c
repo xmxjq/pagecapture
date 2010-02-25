@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Feb 21 21:06:59 2010
+/* at Thu Feb 25 22:17:26 2010
  */
 /* Compiler settings for CBho.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -88,6 +88,13 @@ extern const MIDL_STUB_DESC Object_StubDesc;
 
 extern const MIDL_SERVER_INFO IPageCapture_ServerInfo;
 extern const MIDL_STUBLESS_PROXY_INFO IPageCapture_ProxyInfo;
+
+
+extern const MIDL_STUB_DESC Object_StubDesc;
+
+
+extern const MIDL_SERVER_INFO IProxySwitch_ServerInfo;
+extern const MIDL_STUBLESS_PROXY_INFO IProxySwitch_ProxyInfo;
 
 
 
@@ -196,6 +203,72 @@ CInterfaceStubVtbl _IPageCaptureStubVtbl =
     CStdStubBuffer_DELEGATING_METHODS
 };
 
+
+/* Object interface: IProxySwitch, ver. 0.0,
+   GUID={0xB051BE98,0xC45B,0x46AB,{0x8A,0x2A,0xCF,0xFD,0x93,0x9C,0xDA,0x74}} */
+
+#pragma code_seg(".orpc")
+static const unsigned short IProxySwitch_FormatStringOffsetTable[] =
+    {
+    (unsigned short) -1,
+    (unsigned short) -1,
+    (unsigned short) -1,
+    (unsigned short) -1,
+    0
+    };
+
+static const MIDL_STUBLESS_PROXY_INFO IProxySwitch_ProxyInfo =
+    {
+    &Object_StubDesc,
+    CBho__MIDL_ProcFormatString.Format,
+    &IProxySwitch_FormatStringOffsetTable[-3],
+    0,
+    0,
+    0
+    };
+
+
+static const MIDL_SERVER_INFO IProxySwitch_ServerInfo = 
+    {
+    &Object_StubDesc,
+    0,
+    CBho__MIDL_ProcFormatString.Format,
+    &IProxySwitch_FormatStringOffsetTable[-3],
+    0,
+    0,
+    0,
+    0};
+CINTERFACE_PROXY_VTABLE(7) _IProxySwitchProxyVtbl = 
+{
+    0,
+    &IID_IProxySwitch,
+    IUnknown_QueryInterface_Proxy,
+    IUnknown_AddRef_Proxy,
+    IUnknown_Release_Proxy ,
+    0 /* IDispatch::GetTypeInfoCount */ ,
+    0 /* IDispatch::GetTypeInfo */ ,
+    0 /* IDispatch::GetIDsOfNames */ ,
+    0 /* IDispatch_Invoke_Proxy */
+};
+
+
+static const PRPC_STUB_FUNCTION IProxySwitch_table[] =
+{
+    STUB_FORWARDING_FUNCTION,
+    STUB_FORWARDING_FUNCTION,
+    STUB_FORWARDING_FUNCTION,
+    STUB_FORWARDING_FUNCTION
+};
+
+CInterfaceStubVtbl _IProxySwitchStubVtbl =
+{
+    &IID_IProxySwitch,
+    &IProxySwitch_ServerInfo,
+    7,
+    &IProxySwitch_table[-3],
+    CStdStubBuffer_DELEGATING_METHODS
+};
+
 static const MIDL_STUB_DESC Object_StubDesc = 
     {
     0,
@@ -223,23 +296,27 @@ static const MIDL_STUB_DESC Object_StubDesc =
 const CInterfaceProxyVtbl * const _CBho_ProxyVtblList[] = 
 {
     ( CInterfaceProxyVtbl *) &_IPageCaptureProxyVtbl,
+    ( CInterfaceProxyVtbl *) &_IProxySwitchProxyVtbl,
     0
 };
 
 const CInterfaceStubVtbl * const _CBho_StubVtblList[] = 
 {
     ( CInterfaceStubVtbl *) &_IPageCaptureStubVtbl,
+    ( CInterfaceStubVtbl *) &_IProxySwitchStubVtbl,
     0
 };
 
 PCInterfaceName const _CBho_InterfaceNamesList[] = 
 {
     "IPageCapture",
+    "IProxySwitch",
     0
 };
 
 const IID *  const _CBho_BaseIIDList[] = 
 {
+    &IID_IDispatch,
     &IID_IDispatch,
     0
 };
@@ -249,14 +326,11 @@ const IID *  const _CBho_BaseIIDList[] =
 
 int __stdcall _CBho_IID_Lookup( const IID * pIID, int * pIndex )
 {
-    
-    if(!_CBho_CHECK_IID(0))
-        {
-        *pIndex = 0;
-        return 1;
-        }
+    IID_BS_LOOKUP_SETUP
 
-    return 0;
+    IID_BS_LOOKUP_INITIAL_TEST( _CBho, 2, 1 )
+    IID_BS_LOOKUP_RETURN_RESULT( _CBho, 2, *pIndex )
+    
 }
 
 const ExtendedProxyFileInfo CBho_ProxyFileInfo = 
@@ -266,7 +340,7 @@ const ExtendedProxyFileInfo CBho_ProxyFileInfo =
     (const PCInterfaceName * ) & _CBho_InterfaceNamesList,
     (const IID ** ) & _CBho_BaseIIDList,
     & _CBho_IID_Lookup, 
-    1,
+    2,
     2,
     0, /* table of [async_uuid] interfaces */
     0, /* Filler1 */

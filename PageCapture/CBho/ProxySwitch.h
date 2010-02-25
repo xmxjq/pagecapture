@@ -1,4 +1,4 @@
-// PageCapture.h : Declaration of the CPageCapture
+// ProxySwitch.h : Declaration of the CProxySwitch
 
 #pragma once
 #include "resource.h"       // main symbols
@@ -16,35 +16,33 @@
 using namespace ATL;
 
 
-// CPageCapture
-class ATL_NO_VTABLE CPageCapture :
+// CProxySwitch
+
+class ATL_NO_VTABLE CProxySwitch :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CPageCapture, &CLSID_PageCapture>,
-	public IObjectWithSiteImpl<CPageCapture>,
-	public IDispatchImpl<IPageCapture, &IID_IPageCapture, &LIBID_CBhoLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public CComCoClass<CProxySwitch, &CLSID_ProxySwitch>,
+	public IObjectWithSiteImpl<CProxySwitch>,
+	public IDispatchImpl<IProxySwitch, &IID_IProxySwitch, &LIBID_CBhoLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
 	//用于IE事件
-	public IDispEventImpl<1, CPageCapture, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
+	public IDispEventImpl<1, CProxySwitch, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
 	//用于工具栏图标
 	public IOleCommandTarget
 {
 public:
-	CPageCapture()
+	CProxySwitch()
 	{
 	}
 
-	DECLARE_REGISTRY_RESOURCEID(IDR_PAGECAPTURE)
-
-	DECLARE_NOT_AGGREGATABLE(CPageCapture)
-
-	BEGIN_COM_MAP(CPageCapture)
-		COM_INTERFACE_ENTRY(IPageCapture)
-		COM_INTERFACE_ENTRY(IDispatch)
-		COM_INTERFACE_ENTRY(IObjectWithSite)
-		//用于工具栏图标
-		COM_INTERFACE_ENTRY(IOleCommandTarget)
-	END_COM_MAP()
+DECLARE_REGISTRY_RESOURCEID(IDR_PROXYSWITCH)
 
 
+BEGIN_COM_MAP(CProxySwitch)
+	COM_INTERFACE_ENTRY(IProxySwitch)
+	COM_INTERFACE_ENTRY(IDispatch)
+	COM_INTERFACE_ENTRY(IObjectWithSite)
+			//用于工具栏图标
+	COM_INTERFACE_ENTRY(IOleCommandTarget)
+END_COM_MAP()
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -58,21 +56,13 @@ public:
 	}
 
 public:
-	void ScrollPage(IHTMLElement * page,BSTR direction,int value);
-	
-	void Refresh(CComPtr<IHTMLDocument2> m_spHtmlDoc);
-	void Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch> pDocDispatch,CString filename);
-	void ExecScript(CComPtr<IHTMLDocument2> m_spHtmlDoc,BSTR code);
 
 	BOOL m_fAdvised;
 	STDMETHOD(SetSite)(IUnknown * pUnkSite);
 	CComPtr<IWebBrowser2> m_spWebBrowser;
 
-	void STDMETHODCALLTYPE OnDocumentComplete(IDispatch* pDisp, VARIANT* URL); 
-	//void STDMETHODCALLTYPE OnDownLoadComplete(); 
-
 	//用于IE事件
-	BEGIN_SINK_MAP(CPageCapture)
+	BEGIN_SINK_MAP(CProxySwitch)
 		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE , OnDocumentComplete)
 		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOWNLOADCOMPLETE, OnDownLoadComplete)
 	END_SINK_MAP()
@@ -81,6 +71,9 @@ public:
 	STDMETHOD(Exec)(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, VARIANTARG* pvaOut);   
 	STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
 
+	bool FileIsExist(CString &file);
+	bool ChekProxyProcess(CString &name,bool kill);
+	void Switch(void);
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(PageCapture), CPageCapture)
+OBJECT_ENTRY_AUTO(__uuidof(ProxySwitch), CProxySwitch)
