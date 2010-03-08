@@ -242,8 +242,20 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 
 }
 
-STDMETHODIMP CPageCapture::Exec(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, VARIANTARG*)   
+STDMETHODIMP CPageCapture::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)  
 {   
+	//CString guid;
+	//guid.Format(L"{%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X}"  
+	//	,   pguidCmdGroup->Data1  
+ // ,   pguidCmdGroup->Data2  
+ // ,   pguidCmdGroup->Data3  
+ // ,   pguidCmdGroup->Data4[0],   pguidCmdGroup->Data4[1]  
+ // ,   pguidCmdGroup->Data4[2],   pguidCmdGroup->Data4[3],   pguidCmdGroup->Data4[4],   pguidCmdGroup->Data4[5]  
+ // ,   pguidCmdGroup->Data4[6],   pguidCmdGroup->Data4[7]  
+ // );
+	////guid.Format(L"%s",pvaIn);
+	//AfxMessageBox(guid);
+
 	if(m_spUnkSite == NULL || m_spWebBrowser == NULL) return S_OK;
 
 	HRESULT hr;
@@ -278,13 +290,15 @@ STDMETHODIMP CPageCapture::Exec(const GUID*, DWORD nCmdID, DWORD, VARIANTARG*, V
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());   
 
+	stitle.Replace(L"\"",L"");
+
 	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,L"JPG 文件(*.jpg)|*.jpg||");  
 	
 	filedialog.m_ofn.lpstrTitle = L"请输入文件名";
 
 	if(filedialog.DoModal() == IDOK)
 	{
-		this->Capture(m_spHtmlDoc,pDocDispatch,L"c:\\test.jpg");
+		this->Capture(m_spHtmlDoc,pDocDispatch,filedialog.GetFileName());
 	}
 	pDocDispatch.Release();
 
