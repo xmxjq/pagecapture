@@ -7,6 +7,9 @@
 
 #include "CBho_i.h"
 
+// Define the event sink cookies
+#define IDE_WebBrowserEvents	1
+#define IDE_WebBrowserEvents2	2
 
 
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
@@ -23,7 +26,8 @@ class ATL_NO_VTABLE CPageCapture :
 	public IObjectWithSiteImpl<CPageCapture>,
 	public IDispatchImpl<IPageCapture, &IID_IPageCapture, &LIBID_CBhoLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
 	//用于IE事件
-	public IDispEventImpl<1, CPageCapture, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
+	public IDispEventImpl<IDE_WebBrowserEvents2, CPageCapture, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 1>,
+
 	//用于工具栏图标
 	public IOleCommandTarget
 {
@@ -61,6 +65,7 @@ public:
 	void ScrollPage(IHTMLElement * page,BSTR direction,int value);
 	
 	void Refresh(CComPtr<IHTMLDocument2> m_spHtmlDoc);
+	void SelectFileName(void);
 	void Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch> pDocDispatch,CString filename);
 	void ExecScript(CComPtr<IHTMLDocument2> m_spHtmlDoc,BSTR code);
 
@@ -68,11 +73,14 @@ public:
 	STDMETHOD(SetSite)(IUnknown * pUnkSite);
 	CComPtr<IWebBrowser2> m_spWebBrowser;
 
-	void STDMETHODCALLTYPE OnDocumentComplete(IDispatch* pDisp, VARIANT* URL); 
+	void _stdcall OnBeforeNavigate2(IDispatch *pDisp, VARIANT *URL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, VARIANT_BOOL *Cancel);
+
+	//void STDMETHODCALLTYPE OnDocumentComplete(IDispatch* pDisp, VARIANT* URL); 
 	//void STDMETHODCALLTYPE OnDownLoadComplete(); 
 
 	//用于IE事件
 	BEGIN_SINK_MAP(CPageCapture)
+		SINK_ENTRY_EX(IDE_WebBrowserEvents2, DIID_DWebBrowserEvents2, DISPID_BEFORENAVIGATE2 , OnBeforeNavigate2)
 		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE , OnDocumentComplete)
 		//SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOWNLOADCOMPLETE, OnDownLoadComplete)
 	END_SINK_MAP()

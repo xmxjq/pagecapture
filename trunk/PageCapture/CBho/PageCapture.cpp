@@ -51,9 +51,21 @@ STDMETHODIMP CPageCapture::SetSite(IUnknown *pUnkSite)
 //{
 //}
 
-void STDMETHODCALLTYPE CPageCapture::OnDocumentComplete(IDispatch* pDisp, VARIANT* URL)
-{
+//void STDMETHODCALLTYPE CPageCapture::OnDocumentComplete(IDispatch* pDisp, VARIANT* URL)
+//{
+//
+//}
 
+void _stdcall CPageCapture::OnBeforeNavigate2(IDispatch *pDisp, VARIANT *URL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, VARIANT_BOOL *Cancel)
+{
+	CString url(V_BSTR(URL)); 
+	url = url.MakeLower();
+	//AfxMessageBox(url);
+	if (url.Right(5) == _T("tycap"))
+	{
+		*Cancel = TRUE;
+		this->SelectFileName();
+	}
 }
 
 STDMETHODIMP CPageCapture::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)   
@@ -244,20 +256,13 @@ void CPageCapture::Capture(CComPtr<IHTMLDocument2> m_spHtmlDoc,CComPtr<IDispatch
 
 STDMETHODIMP CPageCapture::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)  
 {   
-	//CString guid;
-	//guid.Format(L"{%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X}"  
-	//	,   pguidCmdGroup->Data1  
- // ,   pguidCmdGroup->Data2  
- // ,   pguidCmdGroup->Data3  
- // ,   pguidCmdGroup->Data4[0],   pguidCmdGroup->Data4[1]  
- // ,   pguidCmdGroup->Data4[2],   pguidCmdGroup->Data4[3],   pguidCmdGroup->Data4[4],   pguidCmdGroup->Data4[5]  
- // ,   pguidCmdGroup->Data4[6],   pguidCmdGroup->Data4[7]  
- // );
-	////guid.Format(L"%s",pvaIn);
-	//AfxMessageBox(guid);
-
 	if(m_spUnkSite == NULL || m_spWebBrowser == NULL) return S_OK;
+	this->SelectFileName();
+	return S_OK;
+}
 
+void CPageCapture::SelectFileName(void)
+{
 	HRESULT hr;
 	BSTR btitle;
 	CString stitle;
@@ -266,7 +271,7 @@ STDMETHODIMP CPageCapture::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD n
 
 	hr = this->m_spWebBrowser->get_Document(&pDocDispatch);
 
-	if(FAILED(hr) || pDocDispatch == NULL) return S_OK;
+	if(FAILED(hr) || pDocDispatch == NULL) return;
 
 	m_spHtmlDoc = pDocDispatch;
 
@@ -278,12 +283,12 @@ STDMETHODIMP CPageCapture::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD n
 		stitle = L"pagecapture.jpg";
 	else
 	{
-		if(stitle.GetLength() > 10)
+		if(stitle.GetLength() > 100)
 		{
-			if(stitle.GetAt(9)>128)
-				stitle.Format(L"%s.jpg",stitle.Left(9));
+			if(stitle.GetAt(99)>128)
+				stitle.Format(L"%s.jpg",stitle.Left(99));
 			else
-			  stitle.Format(L"%s.jpg",stitle.Left(10));
+			  stitle.Format(L"%s.jpg",stitle.Left(100));
 		}
 		
 	}
@@ -301,6 +306,4 @@ STDMETHODIMP CPageCapture::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD n
 		this->Capture(m_spHtmlDoc,pDocDispatch,filedialog.GetFileName());
 	}
 	pDocDispatch.Release();
-
-	return S_OK;
 }
