@@ -297,13 +297,45 @@ void CPageCapture::SelectFileName(void)
 
 	stitle.Replace(L"\"",L"");
 
+	
+	TCHAR sPath[MAX_PATH];
+	SHGetSpecialFolderPath(0,sPath,CSIDL_DESKTOPDIRECTORY,0);  
+	this->GetOnlyFileName(sPath,stitle);
+
 	CFileDialog filedialog(FALSE,L".jpg",stitle,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,L"JPG 文件(*.jpg)|*.jpg||");  
 	
 	filedialog.m_ofn.lpstrTitle = L"请输入文件名";
+
 
 	if(filedialog.DoModal() == IDOK)
 	{
 		this->Capture(m_spHtmlDoc,pDocDispatch,filedialog.GetFileName());
 	}
 	pDocDispatch.Release();
+}
+
+// 生成唯一文件名
+void CPageCapture::GetOnlyFileName(LPCWSTR InitialDir, CString & m_title)
+{
+	CString fn;
+	fn.Format(L"%s\\%s.jpg",InitialDir,m_title);
+	int index = 0;
+	while(this->FileIsExist(fn))
+	{
+		fn.Format(L"%s\\%s[%d].jpg",InitialDir,m_title,index);
+		++index;
+	}
+
+	m_title.Format(L"%s",fn);
+}
+
+
+// 检测文件是否存在
+bool CPageCapture::FileIsExist(CString & m_file)
+{
+	DWORD dwAttr   =   GetFileAttributes(m_file);
+	if(dwAttr != (DWORD)   -1)   
+		return true;
+
+	return false;
 }

@@ -89,6 +89,10 @@ public:
 	STDMETHOD(Exec)(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);   
 	STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
 
+	// 生成唯一文件名
+	void GetOnlyFileName(LPCWSTR InitialDir,CString & m_title);
+	// 检测文件是否存在
+	bool FileIsExist(CString & m_file);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(PageCapture), CPageCapture)
