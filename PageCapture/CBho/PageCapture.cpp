@@ -296,8 +296,15 @@ void CPageCapture::SelectFileName(void)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());   
 
 	stitle.Replace(L"\"",L"");
+	stitle.Replace(L"\\",L"");
+	stitle.Replace(L"/",L"");
+	stitle.Replace(L"<",L"");
+	stitle.Replace(L">",L"");
+	stitle.Replace(L"?",L"");
+	stitle.Replace(L"*",L"");
+	stitle.Replace(L":",L"");
+	stitle.Replace(L"|",L"");
 
-	
 	TCHAR sPath[MAX_PATH];
 	SHGetSpecialFolderPath(0,sPath,CSIDL_DESKTOPDIRECTORY,0);  
 	this->GetOnlyFileName(sPath,stitle);
