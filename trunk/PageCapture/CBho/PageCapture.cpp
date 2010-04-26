@@ -66,6 +66,7 @@ void _stdcall CPageCapture::OnBeforeNavigate2(IDispatch *pDisp, VARIANT *URL, VA
 		*Cancel = TRUE;
 		this->SelectFileName();
 	}
+
 }
 
 STDMETHODIMP CPageCapture::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)   
